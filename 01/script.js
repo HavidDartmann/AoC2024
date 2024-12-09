@@ -3,26 +3,26 @@ import fs from 'fs';
 function getInputValues(input) {
 	const lines = input.trim().split('\n');
 
-	const leftColumn = [];
-	const rightColumn = [];
+	const left = [];
+	const right = [];
 
 	lines.forEach((line) => {
-		const [left, right] = line.split(/\s+/).map(Number);
+		const [leftCol, rightCol] = line.split(/\s+/).map(Number);
 
-		leftColumn.push(left);
-		rightColumn.push(right);
+		left.push(leftCol);
+		right.push(rightCol);
 	});
 
-	return { leftColumn, rightColumn };
+	return { left, right };
 }
 
 function sortArrays(columns) {
-	const { leftColumn, rightColumn } = columns;
+	const { left, right } = columns;
 
-	leftColumn.sort((a, b) => a - b);
-	rightColumn.sort((a, b) => a - b);
+	left.sort((a, b) => a - b);
+	right.sort((a, b) => a - b);
 
-	return { left: leftColumn, right: rightColumn };
+	return { left, right };
 }
 
 function calculateDifference(columns) {
@@ -38,8 +38,27 @@ function calculateDifference(columns) {
 	return totalDifference;
 }
 
+function calcSimilarity(columns) {
+	const { left, right } = columns;
+
+	let totalSimilarity = 0;
+
+	left.forEach((num) => {
+		const count = right.filter((val) => val === num).length;
+		totalSimilarity += num * count;
+	});
+	return totalSimilarity;
+}
+
 const input = getInputValues(fs.readFileSync('./input.txt', 'utf-8'));
+
+// Part one
 const sortedInput = sortArrays(input);
 const diff = calculateDifference(sortedInput);
 
 console.log('The total difference is: ' + diff);
+
+// Part two
+const similarity = calcSimilarity(input);
+
+console.log('The similarity is: ' + similarity);
