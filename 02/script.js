@@ -1,6 +1,6 @@
 import fs from 'fs';
 
-const input = fs.readFileSync('./testinput.txt', 'utf-8');
+const input = fs.readFileSync('./input.txt', 'utf-8');
 
 function getReports(input) {
 	const rows = input.trim().split('\r\n');
@@ -15,11 +15,12 @@ function getReports(input) {
 	return reports;
 }
 
-function checkAmountofSafeReports(reports) {
+function checkAmountofSafeReports(reports, isPartTwo) {
 	let safeReports = 0;
 
 	reports.forEach((report) => {
-		if (isReportSafe(report)) safeReports++;
+		if (isReportSafe(report) || (problemDampener(report) && isPartTwo))
+			safeReports++;
 	});
 
 	return safeReports;
@@ -49,6 +50,22 @@ function isReportSafe(report) {
 	return true;
 }
 
+function problemDampener(report) {
+	for (let i = 0; i < report.length; i++) {
+		const modifiedReport = report.slice(0, i).concat(report.slice(i + 1));
+		if (isReportSafe(modifiedReport)) return true;
+	}
+	return false;
+}
+
 const reports = getReports(input);
-const checkedReports = checkAmountofSafeReports(reports);
+
+// Part One
+const checkedReports = checkAmountofSafeReports(reports, false);
 console.log('Number of safe reports: ' + checkedReports);
+
+// Part two
+const checkedReportsWithPD = checkAmountofSafeReports(reports, true);
+console.log(
+	'Number of safe reports with Problem Dampener: ' + checkedReportsWithPD
+);
