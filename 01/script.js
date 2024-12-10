@@ -50,7 +50,7 @@ function calcSimilarity(columns) {
 	return totalSimilarity;
 }
 
-const input = getInputValues(fs.readFileSync('./input.txt', 'utf-8'));
+const input = getInputValues(fs.readFileSync('./testinput.txt', 'utf-8'));
 
 // Part one
 const sortedInput = sortArrays(input);
