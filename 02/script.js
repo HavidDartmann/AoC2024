@@ -19,8 +19,11 @@ function checkAmountofSafeReports(reports, isPartTwo) {
 	let safeReports = 0;
 
 	reports.forEach((report) => {
-		if (isReportSafe(report) || (problemDampener(report) && isPartTwo))
-			safeReports++;
+		if (isPartTwo) {
+			if (problemDampener(report)) safeReports++;
+		} else {
+			if (isReportSafe(report)) safeReports++;
+		}
 	});
 
 	return safeReports;
@@ -53,6 +56,7 @@ function isReportSafe(report) {
 function problemDampener(report) {
 	for (let i = 0; i < report.length; i++) {
 		const modifiedReport = report.slice(0, i).concat(report.slice(i + 1));
+
 		if (isReportSafe(modifiedReport)) return true;
 	}
 	return false;
